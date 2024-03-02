@@ -201,6 +201,11 @@ export class XMLParser {
         const tagName = tagText.substring(1, current);
 
         const openingTagEndIdx = tagText.substring(tagText.indexOf("<"), tagText.indexOf(">") + 1);
+
+        /**
+         * Regex to find the attribute keys and values.
+         * Used regex groups to easily take out the values.
+         */
         const attrRegex = /(\s)(.+)(=)(")(.+)(")(\/)?>/g;
         const matches = openingTagEndIdx.matchAll(attrRegex);
         const attrs: { [key: string]: string } = {};
@@ -210,6 +215,10 @@ export class XMLParser {
 
         let textContent: string | undefined = undefined;
         if (interval.nestedIntervals.length == 0) {
+            /**
+             * Regex to find the text value of the tag.
+             * Used regex groups to easily take out the values.
+             */
             const textRegex = />(.*)</g;
             const textMatch = tagText.match(textRegex);
             if (textMatch) {
