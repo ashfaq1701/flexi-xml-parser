@@ -287,12 +287,12 @@ class NestedInterval {
 /**
  * Base node data structure.
  */
-class BaseNode {}
+export class BaseNode {}
 
 /**
  * Text node data structure.
  */
-class TextNode extends BaseNode {
+export class TextNode extends BaseNode {
     constructor(public value: string) {
         super();
     }
@@ -301,7 +301,7 @@ class TextNode extends BaseNode {
 /**
  * XML node data structure.
  */
-class XMLNode extends BaseNode {
+export class XMLNode extends BaseNode {
 
     public children: BaseNode[] = [];
 
