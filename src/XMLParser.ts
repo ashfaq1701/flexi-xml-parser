@@ -257,6 +257,12 @@ class NestedInterval {
 
     constructor(public interval: [number, number]) {}
 
+    /**
+     *
+     * Merge the given interval with current / potentially other nested intervals.
+     *
+     * @param interval
+     */
     public addNestedInterval(interval: [number, number]) {
         for (const nestedInterval of this.nestedIntervals) {
             if (nestedInterval.interval[1] >= interval[0]) {
