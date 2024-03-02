@@ -8,7 +8,7 @@ Currently, if interested, the files can be copied and adapted for any use cases.
 
 ## Example
 
-### Sample Request:
+### Sample Input:
 
 ```
 <speak>
@@ -25,7 +25,7 @@ Currently, if interested, the files can be copied and adapted for any use cases.
 </speak>
 ```
 
-### Sample Response:
+### Sample Output:
 
 ```
 [
