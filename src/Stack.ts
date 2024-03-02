@@ -1,3 +1,6 @@
+/**
+ * A Stack implementation.
+ */
 export class Stack<T> {
 
     private readonly items: T[];

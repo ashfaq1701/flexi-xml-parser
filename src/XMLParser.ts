@@ -1,42 +1,22 @@
 import {Stack} from "./Stack";
 
-class NestedInterval {
-
-    public nestedIntervals: NestedInterval[] = [];
-
-    constructor(public interval: [number, number]) {}
-
-    public addNestedInterval(interval: [number, number]) {
-        for (const nestedInterval of this.nestedIntervals) {
-            if (nestedInterval.interval[1] >= interval[0]) {
-                nestedInterval.addNestedInterval(interval);
-                return;
-            }
-        }
-
-        this.nestedIntervals.push(new NestedInterval(interval));
-    }
-}
-
-class BaseNode {}
-
-class TextNode extends BaseNode {
-    constructor(public value: string) {
-        super();
-    }
-}
-
-class XMLNode extends BaseNode {
-
-    public children: BaseNode[] = [];
-
-    constructor(public name: string, public attrs: { [key: string]: string }) {
-        super();
-    }
-}
+/**
+ *
+ * Related problems:
+ *
+ * Valid Parentheses: https://leetcode.com/problems/valid-parentheses/
+ * Merge Intervals: https://leetcode.com/problems/merge-intervals/
+ */
 
 export class XMLParser {
 
+    /**
+     * Parses the given XML string.
+     *
+     * Returns nested interleaved text segments / XML nodes.
+     *
+     * @param str
+     */
     public parse(str: string): BaseNode[] {
         const interval = this.getIntervals(str);
         const nestedIntervals = this.buildNestedIntervals(interval);
@@ -63,6 +43,12 @@ export class XMLParser {
         return nodes;
     }
 
+    /**
+     * Get starting and ending indices of all matching XML tags.
+     * Uses stack based implementation.
+     *
+     * @param str
+     */
     public getIntervals(str: string): [number, number][] {
         const stk = new Stack<number>();
         const intervals: [number, number][] = [];
@@ -101,6 +87,43 @@ export class XMLParser {
         return intervals;
     }
 
+    /**
+     * Merge the intervals as nested (embedded) intervals.
+     *
+     * e.g.,
+     * input: [[0, 10], [3, 5], [6, 9], [11, 17], [13, 16], [18, 25]]
+     * output:
+     * [
+     *  {
+     *   "interval": [0, 10],
+     *   "nestedIntervals": [
+     *    {
+     *     "interval" [3, 5],
+     *     "nestedIntervals": []
+     *    },
+     *    {
+     *     "interval": [6, 9],
+     *     "nestedIntervals": []
+     *    }
+     *   ]
+     *  },
+     *  {
+     *   "interval": [11, 17],
+     *   "nestedIntervals": [
+     *    {
+     *     "interval": [13, 16],
+     *     "nestedIntervals": []
+     *    }
+     *   ]
+     *  },
+     *  {
+     *   "interval": [18, 25],
+     *   "nestedIntervals": []
+     *  }
+     * ]
+     *
+     * @param intervals
+     */
     public buildNestedIntervals(intervals: [number, number][]): NestedInterval[] {
         if (intervals.length === 0) {
             return [];
@@ -125,6 +148,13 @@ export class XMLParser {
         return merged;
     }
 
+    /**
+     * Build nested XML nodes for a given XML "nested interval" object and the XML string.
+     * Creates interleaved text segments and XML nodes.
+     *
+     * @param interval
+     * @param str
+     */
     public getNodeForInterval(interval: NestedInterval, str: string): XMLNode {
         const nodes = [];
         const xmlNode = this.createXMLNode(str, interval);
@@ -153,6 +183,13 @@ export class XMLParser {
         return xmlNode;
     }
 
+    /**
+     * Create XML node given the full XML string and the index bounds.
+     * Extracts tag name, attributes and the text content.
+     *
+     * @param str
+     * @param interval
+     */
     public createXMLNode(str: string, interval: NestedInterval): XMLNode {
         const [intervalStart, intervalEnd] = interval.interval;
         const tagText = str.substring(intervalStart, intervalEnd + 1);
@@ -188,6 +225,12 @@ export class XMLParser {
         return xmlNode;
     }
 
+    /**
+     * Gets the content start and end index given an XML element.
+     *
+     * @param interval
+     * @param str
+     */
     public getContentStartEnd(interval: NestedInterval, str: string): [number, number] {
         const [intervalStart, intervalEnd] = interval.interval;
         let contentStart = intervalStart;
@@ -202,5 +245,52 @@ export class XMLParser {
         }
 
         return [contentStart + 1, contentStart - 1];
+    }
+}
+
+/**
+ * Nested interval data structure
+ */
+class NestedInterval {
+
+    public nestedIntervals: NestedInterval[] = [];
+
+    constructor(public interval: [number, number]) {}
+
+    public addNestedInterval(interval: [number, number]) {
+        for (const nestedInterval of this.nestedIntervals) {
+            if (nestedInterval.interval[1] >= interval[0]) {
+                nestedInterval.addNestedInterval(interval);
+                return;
+            }
+        }
+
+        this.nestedIntervals.push(new NestedInterval(interval));
+    }
+}
+
+/**
+ * Base node data structure.
+ */
+class BaseNode {}
+
+/**
+ * Text node data structure.
+ */
+class TextNode extends BaseNode {
+    constructor(public value: string) {
+        super();
+    }
+}
+
+/**
+ * XML node data structure.
+ */
+class XMLNode extends BaseNode {
+
+    public children: BaseNode[] = [];
+
+    constructor(public name: string, public attrs: { [key: string]: string }) {
+        super();
     }
 }

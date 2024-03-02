@@ -1,6 +1,6 @@
 # XML Parser
 
-Popular NodeJS XML parsing libraries fits simple scenarios. But they are not suitable for complex cases, like interleaved text and XML. These limitation yields them useless in scenarios like SSML and HTML parsing.
+Popular NodeJS XML parsing libraries fits simple scenarios. But they are not suitable for complex cases, like interleaved text and XML. These limitation yields them useless in scenarios like [SSML](https://cloud.google.com/text-to-speech/docs/ssml) and HTML parsing.
 
 This implementation will enable XML parsing for interleaved text / xml documents. It has a flexible structure, which should work in most of the use cases.
 
