@@ -55,7 +55,7 @@ export class XMLParser {
 
         const addInterval = (i: number) => {
             if (stk.isEmpty()) {
-                throw new Error("Invalid XML " + i);
+                throw new Error(`Invalid XML, no matching tag for the closing tag at index ${i}`);
             }
 
             intervals.push([stk.pop(), i]);
@@ -81,7 +81,7 @@ export class XMLParser {
         }
 
         if (!stk.isEmpty()) {
-            throw new Error("Invalid SSML - non empty stack");
+            throw new Error(`Invalid XML - unmatched opening tags at index ${stk.peek()}.`);
         }
 
         return intervals;
