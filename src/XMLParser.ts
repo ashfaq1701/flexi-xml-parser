@@ -50,7 +50,7 @@ export class XMLParser {
      * @param str
      */
     public getIntervals(str: string): [number, number][] {
-        const stk = new Stack<number>();
+        const stk = new Stack<TagInfo>();
         const intervals: [number, number][] = [];
 
         const addInterval = (i: number) => {
@@ -58,15 +58,50 @@ export class XMLParser {
                 throw new Error(`Invalid XML, no matching tag for the closing tag at index ${i}`);
             }
 
-            intervals.push([stk.pop(), i]);
+            /**
+             * Go backward until encountering the start of the tag.
+             */
+            let startOfTag = i;
+            while (startOfTag > 0) {
+                if (str[startOfTag] === "<") {
+                    break;
+                }
+
+                startOfTag--;
+            }
+
+            /**
+             * Extract the ending tag name.
+             */
+            const endingTagName = this.getTagNameStartingAt(str, startOfTag);
+
+            /**
+             * Pop the starting tag.
+             */
+            const startingTag = stk.pop();
+
+            /**
+             * If starting and ending tag names doesn't match, then the XML contains errir.
+             */
+            if (startingTag.tagName !== endingTagName) {
+                throw new Error(`Unmatched tag names, starting tag name is ${startingTag.tagName}, ending tag name is ${endingTagName}`);
+            }
+
+            /**
+             * Add the interval in the result.
+             */
+            intervals.push([startingTag.startingIdx, i]);
         };
+
+
 
         let startedClosingTag = false;
 
         for (let i = 0; i < str.length; i++) {
             if (str[i] == "<") {
                 if (i < str.length - 1 && str[i + 1] !== "/") {
-                    stk.push(i);
+                    const tagName = this.getTagNameStartingAt(str, i);
+                    stk.push(new TagInfo(i, tagName));
                 } else if (i < str.length - 1 && str[i + 1] === "/") {
                     startedClosingTag = true;
                 }
@@ -194,12 +229,10 @@ export class XMLParser {
         const [intervalStart, intervalEnd] = interval.interval;
         const tagText = str.substring(intervalStart, intervalEnd + 1);
 
-        let current = 1;
-        while (tagText[current] != " " && tagText[current] != ">" && tagText[current] != "\n" && tagText[current] != "\r") {
-            current++;
-        }
-        const tagName = tagText.substring(1, current);
-
+        /**
+         * Extract the tag name.
+         */
+        const tagName = this.getTagNameStartingAt(str, intervalStart);
         const openingTagEndIdx = tagText.substring(tagText.indexOf("<"), tagText.indexOf(">") + 1);
 
         /**
@@ -255,6 +288,65 @@ export class XMLParser {
 
         return [contentStart + 1, contentStart - 1];
     }
+
+    /**
+     * Gets the tag name starting from the index of a "<".
+     *
+     * @param str
+     * @param idx
+     */
+    public getTagNameStartingAt(str: string, idx: number): string {
+        let startIdx = idx;
+
+        /**
+         * Move forward until starting the alphanumeric "tag name".
+         */
+        while (startIdx < str.length) {
+            if (str[startIdx] !== "<" && str[startIdx] !== "\/") {
+                break;
+            }
+
+            startIdx += 1;
+        }
+
+        let currentIdx = startIdx;
+
+        /**
+         * Regex for space OR line break OR > OR />
+         */
+        const regex = /^(\s|\/>|>)/;
+
+        /**
+         * Move ahead until a space or line break or ">" or "/>" is encountered.
+         */
+        while (currentIdx < str.length) {
+            /**
+             * Get one and two characters from the current index.
+             */
+            const oneChar = str[currentIdx];
+            const twoChar = currentIdx < str.length - 1
+                ? str.substring(currentIdx, currentIdx + 2)
+                : str[currentIdx];
+
+            /**
+             * Match one character with "\s" or ">" and two characters with "/>".
+             */
+            if (regex.test(oneChar) || regex.test(twoChar)) {
+                break;
+            }
+
+            currentIdx++;
+        }
+
+        /**
+         * Extract the tag name and return.
+         */
+        return str.substring(startIdx, currentIdx);
+    }
+}
+
+class TagInfo {
+    constructor(public startingIdx: number, public tagName: string) {}
 }
 
 /**
