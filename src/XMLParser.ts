@@ -81,7 +81,7 @@ export class XMLParser {
             const startingTag = stk.pop();
 
             /**
-             * If starting and ending tag names doesn't match, then the XML contains errir.
+             * If starting and ending tag names doesn't match, then the XML contains error.
              */
             if (startingTag.tagName !== endingTagName) {
                 throw new Error(`Unmatched tag names, starting tag name is ${startingTag.tagName}, ending tag name is ${endingTagName}`);
