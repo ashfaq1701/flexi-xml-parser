@@ -246,25 +246,7 @@ export class XMLParser {
             attrs[match[2]] = match[5];
         }
 
-        let textContent: string | undefined = undefined;
-        if (interval.nestedIntervals.length == 0) {
-            /**
-             * Regex to find the text value of the tag.
-             * Used regex groups to easily take out the values.
-             */
-            const textRegex = />(.*)</g;
-            const textMatch = tagText.match(textRegex);
-            if (textMatch) {
-                textContent = textMatch[0].substring(1, textMatch[0].length - 1);
-            }
-        }
-
-        const xmlNode = new XMLNode(tagName, attrs);
-        if (textContent) {
-            xmlNode.children.push(new TextNode(textContent));
-        }
-
-        return xmlNode;
+        return new XMLNode(tagName, attrs);
     }
 
     /**
@@ -282,8 +264,12 @@ export class XMLParser {
             contentStart++;
         }
 
-        while (contentStart >= 0 && str[contentEnd] !== "<") {
+        while (contentEnd >= 0 && str[contentEnd] !== "<") {
             contentEnd--;
+        }
+
+        if (contentEnd < contentStart) {
+            contentEnd = contentStart + 1;
         }
 
         return [contentStart + 1, contentEnd - 1];
