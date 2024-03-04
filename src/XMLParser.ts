@@ -286,7 +286,7 @@ export class XMLParser {
             contentEnd--;
         }
 
-        return [contentStart + 1, contentStart - 1];
+        return [contentStart + 1, contentEnd - 1];
     }
 
     /**
