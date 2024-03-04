@@ -268,6 +268,9 @@ export class XMLParser {
             contentEnd--;
         }
 
+        /**
+         * Self-closing node, need workaround to represent bounds properly.
+         */
         if (contentEnd < contentStart) {
             contentEnd = contentStart + 1;
         }
