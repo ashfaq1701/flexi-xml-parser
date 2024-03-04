@@ -233,14 +233,14 @@ export class XMLParser {
          * Extract the tag name.
          */
         const tagName = this.getTagNameStartingAt(str, intervalStart);
-        const openingTagEndIdx = tagText.substring(tagText.indexOf("<"), tagText.indexOf(">") + 1);
+        const openingTag = tagText.substring(tagText.indexOf("<"), tagText.indexOf(">") + 1);
 
         /**
          * Regex to find the attribute keys and values.
          * Used regex groups to easily take out the values.
          */
         const attrRegex = /(\s)(.+)(=)(")(.+)(")(\/)?>/g;
-        const matches = openingTagEndIdx.matchAll(attrRegex);
+        const matches = openingTag.matchAll(attrRegex);
         const attrs: { [key: string]: string } = {};
         for (const match of matches) {
             attrs[match[2]] = match[5];
