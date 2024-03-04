@@ -11,24 +11,18 @@ Currently, if interested, the files can be copied and adapted for any use cases.
 ### Sample Input:
 
 ```
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sample HTML with Tags</title>
-</head>
-<body>
-  <h1>Welcome to my website!</h1>
-
-  <p>This is a paragraph containing some <b>bold</b> and <em>italic</em> text. You can also add <a href="https://www.google.com" target="_blank">links</a> with attributes like `href` (specifying the target URL) and `target` (defining how the link opens, in this case "_blank" opens in a new tab).</p>
-
-  <img src="image.jpg" alt="Image description" width="300" height="200">  <ul>
-    <li>Item 1 in an unordered list</li>
-    <li>Item 2 with a <b>class</b> attribute set to "special"</li>
-  </ul>
-
-  <button type="button" onclick="alert('Button clicked!')">Click me!</button> </body>
-</html>
+<speak>
+  Here are <say-as interpret-as="characters">SSML</say-as> samples.
+  I can pause <break time="3s"/>.
+  I can play a sound
+  <audio src="https://www.example.com/MY_MP3_FILE.mp3">didn't get your MP3 audio file</audio>.
+  I can speak in cardinals. Your number is <say-as interpret-as="cardinal">10</say-as>.
+  Or I can speak in ordinals. You are <say-as interpret-as="ordinal">10</say-as> in line.
+  Or I can even speak in digits. The digits for ten are <say-as interpret-as="characters">10</say-as>.
+  I can also substitute phrases, like the <sub alias="World Wide Web Consortium">W3C</sub>.
+  Finally, I can speak a paragraph with two sentences.
+  <p><s>This is sentence one.</s><s>This is sentence two.</s></p>
+</speak>
 ```
 
 ### Sample Output:
@@ -36,79 +30,109 @@ Currently, if interested, the files can be copied and adapted for any use cases.
 ```
 [
    {
-      "name":"head",
+      "name":"speak",
       "attrs":{
          
       },
       "children":[
          {
-            "value":"\r\n  "
+            "value":"\r\n  Here are "
          },
          {
-            "name":"meta",
+            "name":"say-as",
             "attrs":{
-               "charset":"UTF-8"
-            },
-            "children":[
-               
-            ]
-         },
-         {
-            "value":"\r\n  "
-         },
-         {
-            "name":"meta",
-            "attrs":{
-               "name=\"viewport\" content":"width=device-width, initial-scale=1.0"
-            },
-            "children":[
-               
-            ]
-         },
-         {
-            "value":"\r\n  "
-         },
-         {
-            "name":"title",
-            "attrs":{
-               
+               "interpret-as":"characters"
             },
             "children":[
                {
-                  "value":"Sample HTML with Tags"
+                  "value":"SSML"
                }
             ]
          },
          {
-            "value":"\r\n"
-         }
-      ]
-   },
-   {
-      "value":"\r\n"
-   },
-   {
-      "name":"body",
-      "attrs":{
-         
-      },
-      "children":[
-         {
-            "value":"\r\n  "
+            "value":" samples.\r\n  I can pause "
          },
          {
-            "name":"h1",
+            "name":"break",
             "attrs":{
+               "time":"3s"
+            },
+            "children":[
                
+            ]
+         },
+         {
+            "value":".\r\n  I can play a sound\r\n  "
+         },
+         {
+            "name":"audio",
+            "attrs":{
+               "src":"https://www.example.com/MY_MP3_FILE.mp3"
             },
             "children":[
                {
-                  "value":"Welcome to my website!"
+                  "value":"didn't get your MP3 audio file"
                }
             ]
          },
          {
-            "value":"\r\n\r\n  "
+            "value":".\r\n  I can speak in cardinals. Your number is "
+         },
+         {
+            "name":"say-as",
+            "attrs":{
+               "interpret-as":"cardinal"
+            },
+            "children":[
+               {
+                  "value":"10"
+               }
+            ]
+         },
+         {
+            "value":".\r\n  Or I can speak in ordinals. You are "
+         },
+         {
+            "name":"say-as",
+            "attrs":{
+               "interpret-as":"ordinal"
+            },
+            "children":[
+               {
+                  "value":"10"
+               }
+            ]
+         },
+         {
+            "value":" in line.\r\n  Or I can even speak in digits. The digits for ten are "
+         },
+         {
+            "name":"say-as",
+            "attrs":{
+               "interpret-as":"characters"
+            },
+            "children":[
+               {
+                  "value":"10"
+               }
+            ]
+         },
+         {
+            "value":".\r\n  I can also substitute phrases, like the "
+         },
+         {
+            "name":"sub",
+            "attrs":{
+               "alias":"World Wide Web Consortium"
+            },
+            "children":[
+               {
+                  "value":"W3C"
+               }
+            ]
+         },
+         {
+            "value":".\r\n  Finally, I can speak a paragraph with two sentences.\r\n  "
          },
          {
             "name":"p",
@@ -117,131 +141,26 @@ Currently, if interested, the files can be copied and adapted for any use cases.
             },
             "children":[
                {
-                  "value":"This is a paragraph containing some "
-               },
-               {
-                  "name":"b",
+                  "name":"s",
                   "attrs":{
                      
                   },
                   "children":[
                      {
-                        "value":"bold"
+                        "value":"This is sentence one."
                      }
                   ]
                },
                {
-                  "value":" and "
-               },
-               {
-                  "name":"em",
+                  "name":"s",
                   "attrs":{
                      
                   },
                   "children":[
                      {
-                        "value":"italic"
+                        "value":"This is sentence two."
                      }
                   ]
-               },
-               {
-                  "value":" text. You can also add "
-               },
-               {
-                  "name":"a",
-                  "attrs":{
-                     "href=\"https://www.google.com\" target":"_blank"
-                  },
-                  "children":[
-                     {
-                        "value":"links"
-                     }
-                  ]
-               },
-               {
-                  "value":" with attributes like `href` (specifying the target URL) and `target` (defining how the link opens, in this case \"_blank\" opens in a new tab)."
-               }
-            ]
-         },
-         {
-            "value":"\r\n\r\n  "
-         },
-         {
-            "name":"img",
-            "attrs":{
-               "src=\"image.jpg\" alt=\"Image description\" width=\"300\" height":"200"
-            },
-            "children":[
-               
-            ]
-         },
-         {
-            "value":"  "
-         },
-         {
-            "name":"ul",
-            "attrs":{
-               
-            },
-            "children":[
-               {
-                  "value":"\r\n    "
-               },
-               {
-                  "name":"li",
-                  "attrs":{
-                     
-                  },
-                  "children":[
-                     {
-                        "value":"Item 1 in an unordered list"
-                     }
-                  ]
-               },
-               {
-                  "value":"\r\n    "
-               },
-               {
-                  "name":"li",
-                  "attrs":{
-                     
-                  },
-                  "children":[
-                     {
-                        "value":"Item 2 with a "
-                     },
-                     {
-                        "name":"b",
-                        "attrs":{
-                           
-                        },
-                        "children":[
-                           {
-                              "value":"class"
-                           }
-                        ]
-                     },
-                     {
-                        "value":" attribute set to \"special\""
-                     }
-                  ]
-               },
-               {
-                  "value":"\r\n  "
-               }
-            ]
-         },
-         {
-            "value":"\r\n\r\n  "
-         },
-         {
-            "name":"button",
-            "attrs":{
-               "type=\"button\" onclick":"alert('Button clicked!')"
-            },
-            "children":[
-               {
-                  "value":"Click me!"
                }
             ]
          }
