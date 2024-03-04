@@ -191,7 +191,7 @@ export class XMLParser {
      * @param str
      */
     public getNodeForInterval(interval: NestedInterval, str: string): XMLNode {
-        const nodes = [];
+        const nodes: BaseNode[] = [];
         const xmlNode = this.createXMLNode(str, interval);
 
         const [contentStart, contentEnd] = this.getContentStartEnd(interval, str);
