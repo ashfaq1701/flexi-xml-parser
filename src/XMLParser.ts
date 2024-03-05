@@ -26,7 +26,7 @@ export class XMLParser {
         }
 
         const nodes: BaseNode[] = [];
-        let current = nestedIntervals[0].interval[0];
+        let current = 0;
 
         for (const nestedInterval of nestedIntervals) {
             const [nestedIntervalStart, nestedIntervalEnd] = nestedInterval.interval;
@@ -38,6 +38,10 @@ export class XMLParser {
             nodes.push(this.getNodeForInterval(nestedInterval, str));
 
             current = nestedIntervalEnd + 1;
+        }
+
+        if (current < str.length) {
+            nodes.push(str.substring(current, str.length));
         }
 
         return nodes;
@@ -235,15 +239,29 @@ export class XMLParser {
         const tagName = this.getTagNameStartingAt(str, intervalStart);
         const openingTag = tagText.substring(tagText.indexOf("<"), tagText.indexOf(">") + 1);
 
+        const attrSpacingRegex = /\s*=\s*/g;
+        const openingTagCleaned = openingTag.replaceAll(attrSpacingRegex, "=")
+            .replaceAll(/s+/g, " ")
+            .replaceAll(/[<\/>]/g, "")
+            .trim();
+
+        const itemsSeparated = openingTagCleaned.split(" ");
+
         /**
-         * Regex to find the attribute keys and values.
-         * Used regex groups to easily take out the values.
+         * Check all the attributes and store the attributes
          */
-        const attrRegex = /(\s)(.+)(=)(")(.+)(")(\/)?>/g;
-        const matches = openingTag.matchAll(attrRegex);
-        const attrs: { [key: string]: string } = {};
-        for (const match of matches) {
-            attrs[match[2]] = match[5];
+        const attrRegex = /^"?\S+"?="\S*"$/;
+        const attrs: {[key: string]: string} = {};
+        for (let i = 1; i < itemsSeparated.length; i++) {
+            const attr = itemsSeparated[i];
+
+            if (!attrRegex.test(attr)) {
+                throw Error(`Invalid attr item passed ${attr}`);
+            }
+
+            const attrParts = attr.split("=");
+            const attrKey = attrParts[0].replaceAll("\"", "");
+            attrs[attrKey] = attrParts[1].replaceAll("\"", "");
         }
 
         return new XMLNode(tagName, attrs);
@@ -285,13 +303,15 @@ export class XMLParser {
      * @param idx
      */
     public getTagNameStartingAt(str: string, idx: number): string {
+        const preTagRegex = /<|\/|\s/
         let startIdx = idx;
+
 
         /**
          * Move forward until starting the alphanumeric "tag name".
          */
         while (startIdx < str.length) {
-            if (str[startIdx] !== "<" && str[startIdx] !== "\/") {
+            if (!preTagRegex.test(str[startIdx])) {
                 break;
             }
 
